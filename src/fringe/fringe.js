@@ -77,7 +77,7 @@ var Class = function(argObject, source){
 		}
 
 		// Add the class to the package
-		_package[_class] = func;
+		_packageName[_class] = func;
 		
 		// Remove the _parentClass' extending attribute
 		delete _parentClass.prototype.extending;
@@ -104,7 +104,7 @@ var fringe = window.fringe = {
 fringe.util = {};
 
 //Class ArrayList
-Class({package: fringe.util, class: 'ArrayList', extends: Object}, {
+Class({'package': fringe.util, 'class': 'ArrayList', 'extends': Object}, {
 	
 	/**
 	 * Element collection
