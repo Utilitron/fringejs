@@ -28,7 +28,7 @@
  *  
  */
 var Class = function(argObject, source){
-	if ("package" in arguments)
+	if ("package" in argObject)
 		_packageName = argObject["package"];
 	
 	if ("class" in argObject)
@@ -46,7 +46,7 @@ var Class = function(argObject, source){
 		var func = function (){
 			// Are we extending or instantiating?
 			if (!this.extending)
-				this.constructor.apply(this, argObject);
+				this.constructor.apply(this, arguments);
 
 		};
 
