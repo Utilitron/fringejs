@@ -128,7 +128,7 @@ Class({package: fringe.util, class: 'ArrayList', extends: Object}, {
 	 * Returns true if this collection contains no elements.
 	 */
 	isEmpty: function (){
-		return (this.elements.length > 0);
+		return (this.elements.length === 0);
 	},
 	
 	/**
