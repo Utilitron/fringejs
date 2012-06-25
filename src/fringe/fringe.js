@@ -27,26 +27,26 @@
  *	- linking class hierarchy through the .super function
  *  
  */
-var Class = function(arguments, source){
+var Class = function(argObject, source){
 	if ("package" in arguments)
-		_package = arguments["package"];
+		_packageName = argObject["package"];
 	
-	if ("class" in arguments)
-		_class = arguments["class"];
+	if ("class" in argObject)
+		_class = argObject["class"];
 	
-	if ("extends" in arguments)
-		_parentClass = arguments["extends"];
+	if ("extends" in argObject)
+		_parentClass = argObject["extends"];
 
-	if ("implements" in arguments)
-		_interfaces = arguments["implements"];
+	if ("implements" in argObject)
+		_interfaces = argObject["implements"];
 
 	// Require a package? For now, yes.
-	if (_package != null){
+	if (_packageName != null){
 		// The new class
 		var func = function (){
 			// Are we extending or instantiating?
 			if (!this.extending)
-				this.constructor.apply(this, arguments);
+				this.constructor.apply(this, argObject);
 
 		};
 
