@@ -33,21 +33,22 @@ Class({package: fringe.ui, class: 'UiObject', extends: Object}, {
 	/**
 	 * Constructor
 	 */
-	UiObject: function(properties){
-		if (properties != undefined && properties != null){
-			if("id" in properties)
-				this.id = properties.id;
-			else 
-				throw new Error("Missing ID");
-		}
+	UiObject: function(){
+	},
+
+	/**
+	 * Id: setter
+	 */
+	setId: function(id){
+		this.id = id;
+		if (this.element != null)
+			this.element.id = id;
 	}
 });
 
 
 //Class Component
 Class({package: fringe.ui, class: 'Component', extends: fringe.ui.UiObject}, {
-	height: null,
-	width: null,
 
 	/**
 	 * HTML Parent
@@ -57,15 +58,10 @@ Class({package: fringe.ui, class: 'Component', extends: fringe.ui.UiObject}, {
 	/**
 	 * Constructor
 	 */
-	Component: function(properties){
-		if (properties != undefined && properties != null){
-			this.super(properties);
-			if ("height" in properties)
-				this.height = properties.height;
-			
-			if ("width" in properties)
-				this.width = properties.width;
-		}
+	Component: function(){
+		this.super();
+		
+		this.build();
 	},
 	
 	/**
@@ -75,6 +71,9 @@ Class({package: fringe.ui, class: 'Component', extends: fringe.ui.UiObject}, {
 		this.parentElement = parentElement;
 
     	this.parentElement.appendChild(this.element);
+	},
+	
+	build: function() {
 	}
 });
 
@@ -82,21 +81,20 @@ Class({package: fringe.ui, class: 'Component', extends: fringe.ui.UiObject}, {
 /* package */
 fringe.ui.components = {};
 
-
 //Class Container
 Class({package: fringe.ui.components, class: 'Container', extends: fringe.ui.Component}, {
 	/**
 	 * Components
 	 */
-	components: new fringe.util.ArrayList(),
+	components: null,
 
 	/**
 	 * Constructor
 	 */
-	Container: function(properties){
-		if (properties != undefined && properties != null){
-			this.super(properties);
-		}
+	Container: function(){
+		this.super();
+		
+		this.components = new fringe.util.ArrayList();
 	},
 
 	/**
@@ -110,22 +108,29 @@ Class({package: fringe.ui.components, class: 'Container', extends: fringe.ui.Com
 	 * Add Component
 	 */
 	addComponent: function (component){
-		//if (component instanceof Component){
-			this.components.add(component);
-			component.build();
-			component.setParentElement(this.element);
-		//}
+		this.components.add(component);
+		component.setParentElement(this.element);
 	},
 	
 	/**
 	 * Remove Component
 	 */
 	removeComponent: function (component){
-		//if (component instanceof Component){
-			if (this.components.contains(component)){ 
-				this.components.remove(component);
-				this.element.removeChild(component.element);
-			}
-		//}
+		this.components.remove(component);
+		this.element.removeChild(component.element);
+	},
+	
+	/**
+	 * Get Component By Id
+	 */
+	getComponentById: function (componentId){
+		var size = this.numComponents();
+		for (i = 0; i < size; i++){
+			var component = this.components.elements[i];
+			if (component.id == componentId)
+				return component;
+		}
+		
+		return null;
 	}
 });

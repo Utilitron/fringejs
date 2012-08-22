@@ -37,9 +37,6 @@ var Class = function(argObject, source){
 	if ("extends" in argObject)
 		_parentClass = argObject["extends"];
 
-	if ("implements" in argObject)
-		_interfaces = argObject["implements"];
-
 	// Require a package? For now, yes.
 	if (_packageName != null){
 		// The new class
@@ -51,11 +48,11 @@ var Class = function(argObject, source){
 		};
 
 		// Set the _parentClass' extending attribute to true
-		_parentClass.prototype.extending = true;
+		_parentClass.extending = true;
 		
 		// Set up the parent class of the constructor.
 		// This will be used to cascade through super constructors
-		source[_class].parentClass = _parentClass.prototype;
+		source[_class].parentClass = new _parentClass;
 		
 		// Set up our class' prototype, constructor, and super
 		func.prototype = new _parentClass;
@@ -80,18 +77,12 @@ var Class = function(argObject, source){
 		_packageName[_class] = func;
 		
 		// Remove the _parentClass' extending attribute
-		delete _parentClass.prototype.extending;
+		delete _parentClass.extending;
 
 	}
 };
 
 
-var Interface = function ( source ){
-	for (i in source)
-		this[i] = source[i];
-
-};
-Interface.prototype = new Object();
 
 //------------------------------------------------------------------------
 
@@ -104,7 +95,7 @@ var fringe = window.fringe = {
 fringe.util = {};
 
 //Class ArrayList
-Class({'package': fringe.util, 'class': 'ArrayList', 'extends': Object}, {
+Class({package: fringe.util, class: 'ArrayList', extends: Object}, {
 	
 	/**
 	 * Element collection
@@ -115,6 +106,7 @@ Class({'package': fringe.util, 'class': 'ArrayList', 'extends': Object}, {
 	 * Constructor
 	 */
 	ArrayList: function(){
+		this.elements = new Array();
 	},
 	
 	/**
@@ -142,16 +134,137 @@ Class({'package': fringe.util, 'class': 'ArrayList', 'extends': Object}, {
 	 * Adds an element to this collection.
 	 */
 	add: function(obj){
-		return this.elements.push(obj);
+		this.elements.push(obj);
 	},
 
 	/**
 	 * Removes an element to this collection.
 	 */
 	remove: function(obj){
-		if (obj in this.elements){
-			var index = array.indexOf(obj);
+		var index = this.elements.indexOf(obj);
+		if (index != -1){
 			this.elements.splice(index,1);
 		}
+	}
+	
+	/**
+	 * Return the element at this index.
+	 * /
+	get: function(index){
+		TODO
+	}*/
+});
+
+//Class AjaxUtil
+Class({package: fringe.util, class: 'AjaxUtil', extends: Object}, {
+	
+	/**
+	 * Constructor
+	 */
+	AjaxUtil: function(){
+	},
+	
+	/**
+	 * Ajax Object
+	 */
+	ajaxObj: null,
+
+	/**
+	 * Getter for the Ajax Object
+	 */
+	getAjaxObject: function() {
+		if (this.ajaxObj == null) {
+			// error testing
+			if (window.XMLHttpRequest) {
+				this.ajaxObj = new XMLHttpRequest();
+			} else if (window.ActiveXObject) {
+				this.ajaxObj = new ActiveXObject("Microsoft.XMLHTTP");
+			}
+		}
+
+		return this.ajaxObj;
+	},
+	
+	/**
+	 * URL String
+	 */
+	url: null,
+
+	/**
+	 * URL: setter
+	 */
+	setUrl: function(url) {
+		this.url = url;
+	},
+
+	/**
+	 * Method String
+	 */
+	method: 'GET',
+
+	/**
+	 * Method: setter
+	 */
+	setMethod: function(method) {
+		this.method = method;
+	},
+
+	params: null,
+
+	/**
+	 * Params: setter
+	 */
+	setParams: function(params) {
+		this.params = params;
+	},
+	
+	/**
+	 * Ajax Send Request
+	 */
+	sendRequest: function() {
+		var ajaxObj = this.getAjaxObject();
+		if (ajaxObj != null && this.url != null
+			&& this.ajaxResponseHandler != null) {
+			ajaxObj.onreadystatechange = this.ajaxResponseHandler;
+			
+			ajaxObj.open(this.method, this.url, true);
+			
+			if (this.method == 'POST'){
+				//Send the proper header information along with the request
+				ajaxObj.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			}
+			
+			ajaxObj.send(this.params);
+		} else {
+			var errorMessage = "AJAX ERROR!";
+			if (ajaxObj == null) {
+				errorMessage += "\n" + "The ajax object is not initialized.";
+			}
+
+			if (this.url == null) {
+				errorMessage += "\n" + "The url is not set.";
+			}
+
+			if (this.ajaxResponseHandler == null) {
+				errorMessage += "\n" + "The response handler is not set.";
+			}
+
+			alert(errorMessage);
+		}
+	},
+
+	/**
+	 * Ajax Response Handler
+	 */
+	ajaxResponseHandler: null,
+
+	/**
+	 * Setter for the Ajax Response Handler
+	 */
+	setAjaxResponseHandler: function(responseHandler) {
+		this.ajaxResponseHandler = function() {
+			if (this.readyState == 4 || this.readyState == 'complete')
+				responseHandler(this);
+		};
 	}
 });
