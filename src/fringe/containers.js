@@ -150,8 +150,6 @@ fringe.ui.components.containers.Panel = Object.create(new fringe.ui.components.C
 					closeButton.textContent = 'Close';
 				
 				this.titleBar.element.appendChild(closeButton);
-				
-				alert("panel: " + this.numComponents());
 			 }
 	}
 	
