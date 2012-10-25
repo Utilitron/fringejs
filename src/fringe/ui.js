@@ -64,7 +64,15 @@ fringe.ui.Component = Object.create(fringe.ui.UiObject, {
 					 }
 	},
 	
-	build: { configurable:false, value: function (){ alert("!!"); } }
+	/**
+	 * Build
+	 */
+	build: { configurable:false, 
+			 value: function (){
+				// Most elements will just be a div, otherwise overwrite this with what needs to be added.
+			  	this.element = document.createElement('div');
+			 }
+	}
 });
 
 
@@ -73,12 +81,13 @@ fringe.ui.components = {};
 
 
 //Container
-fringe.ui.components.Container = Object.create(fringe.ui.Component, {
+fringe.ui.components.Container = function(){ this.components = new fringe.util.ArrayList };
+fringe.ui.components.Container.prototype = Object.create(fringe.ui.Component, {
 	/**
 	 * Components collection
 	 * private final ArrayList
 	 */
-	components: { writeable:false, configurable:false, enumerable:false,  value: Object.create(fringe.util.ArrayList) },
+	components: { writeable:false, configurable:false, enumerable:false,  value: null },
 
 	/**
 	 * Number Of Components
