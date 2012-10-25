@@ -30,12 +30,13 @@ var fringe = window.fringe = Object.create(Object.prototype, {
 fringe.util = {};
  
 //ArrayList
-fringe.util.ArrayList = Object.create(Object.prototype, {
+fringe.util.ArrayList = function(){ this.elements = [] }
+fringe.util.ArrayList.prototype = Object.create(Object.prototype, {
 	/**
 	 * Element collection
 	 * private final Array
 	 */
-	elements: { writeable:false, configurable:false, enumerable:false,  value: [] },
+	elements: { writeable:false, configurable:false, enumerable:false,  value: null },
  
 	/**
 	 * public getter Number
@@ -84,7 +85,7 @@ fringe.util.AjaxUtil = Object.create(Object.prototype, {
 	METHOD_GET: { writeable:false, configurable:false, enumerable:false, value: 'GET' },
 	METHOD_POST: { writeable:false, configurable:false, enumerable:false, value: 'POST' },
 	METHOD_PUT: { writeable:false, configurable:false, enumerable:false, value: 'PUT' },
-	
+
 	/**
 	 * Method String
 	 */
@@ -98,17 +99,17 @@ fringe.util.AjaxUtil = Object.create(Object.prototype, {
 						  throw new Error('!!');
 			  }
 	},
-	
+
 	/**
 	 * URL String
 	 */
 	url: { configurable:false, value: null },
-	 
+
 	/**
 	 * Parameters
 	 */
 	 params: { configurable:false, value: null },
-	
+
 	/**
 	 * public getter Ajax Object
 	 * Returns the Ajax Object.
@@ -119,18 +120,18 @@ fringe.util.AjaxUtil = Object.create(Object.prototype, {
 				   if (this._ajaxObj == null){
 					   if (window.XMLHttpRequest)
 						   this._ajaxObj = new XMLHttpRequest();
-	  
+
 					   else if (window.ActiveXObject)
 						   this._ajaxObj = new ActiveXObject("Microsoft.XMLHTTP");
-	  
+
 					   else
 						   throw new Error('The ajax object could not be initialized.');
 				   }
-				   
+
 				   return this._ajaxObj;
 			   }
 	},
-	 
+
 	/**
 	 * Ajax Response Handler
 	 */
@@ -144,7 +145,7 @@ fringe.util.AjaxUtil = Object.create(Object.prototype, {
 									};
 						   }
 	},
-	  
+
 	/**
 	 * Ajax Send Request
 	 */
@@ -152,27 +153,27 @@ fringe.util.AjaxUtil = Object.create(Object.prototype, {
 				   value: function() {
 						if (this.url != null && this.ajaxResponseHandler != null) {
 							this.ajaxObj.onreadystatechange = this.ajaxResponseHandler;
-						  
+
 							this.ajaxObj.open(this.method, this.url, true);
-						  
+
 							if (this.method == 'POST'){
 									//Send the proper header information along with the request
 								this.ajaxObj.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 							}
-						  
+
 							this.ajaxObj.send(this.params);
 						} else {
 							if (this.url == null) {
 								errorMessage += "\n" + "The url is not set.";
 							}
-						 
+
 							if (this.ajaxResponseHandler == null) {
 								errorMessage += "\n" + "The response handler is not set.";
 							}
-					 
+
 							throw new Error(errorMessage);
 						}
 					}
 				}
-	 
+
 });
