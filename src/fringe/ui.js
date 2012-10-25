@@ -20,109 +20,95 @@
 fringe.ui = {};
 
 
-//Class UiObject
-Class({package: fringe.ui, class: 'UiObject', extends: Object}, {
-	
-	id: null,
-	
-	/**
-	 * HTML Element
-	 */
-	element: null,
+//UiObject
+fringe.ui.UiObject = Object.create(Object.prototype, {
 
-	/**
-	 * Constructor
-	 */
-	UiObject: function(){
+	id: { configurable:false,
+		  get: function() { 
+				  if (this.element != null)
+					  return this.element.id;
+				  else
+					  return null;
+			  },
+		  set: function(value) {
+				  if (this.element != null)
+					  this.element.id = value;
+				  else
+					  throw new Error('!!');
+			  }
 	},
 
+	
 	/**
-	 * Id: setter
+	 * Element 
+	 * public HtmlElement
 	 */
-	setId: function(id){
-		this.id = id;
-		if (this.element != null)
-			this.element.id = id;
-	}
+	element: { configurable:false,  value: null },
+ 
+
 });
 
-
-//Class Component
-Class({package: fringe.ui, class: 'Component', extends: fringe.ui.UiObject}, {
-
+fringe.ui.Component = Object.create(fringe.ui.UiObject, {
 	/**
 	 * HTML Parent
 	 */
-	parentElement: null,
-	
-	/**
-	 * Constructor
-	 */
-	Component: function(){
-		this.super();
-		
-		this.build();
+	_parentElement: { configurable:false, enumerable:false, value: null },
+	parentElement: { configurable:false,
+					 get: function() { return this._parentElement },
+					 set: function(parentElement) {
+						 if (this.element != null){
+							 this._parentElement = parentElement;
+						 	 this._parentElement.appendChild(this.element);
+						 } else
+							 throw new Error('!!');
+					 }
 	},
 	
-	/**
-	 * Parent: setter
-	 */
-	setParentElement: function(parentElement) {
-		this.parentElement = parentElement;
-
-    	this.parentElement.appendChild(this.element);
-	},
-	
-	build: function() {
-	}
+	build: { configurable:false, value: function (){ alert("!!"); } }
 });
 
 
 /* package */
 fringe.ui.components = {};
 
-//Class Container
-Class({package: fringe.ui.components, class: 'Container', extends: fringe.ui.Component}, {
-	/**
-	 * Components
-	 */
-	components: null,
 
+//Container
+fringe.ui.components.Container = Object.create(fringe.ui.Component, {
 	/**
-	 * Constructor
+	 * Components collection
+	 * private final ArrayList
 	 */
-	Container: function(){
-		this.super();
-		
-		this.components = new fringe.util.ArrayList();
-	},
+	components: { writeable:false, configurable:false, enumerable:false,  value: Object.create(fringe.util.ArrayList) },
 
 	/**
 	 * Number Of Components
 	 */
-	numComponents: function(){
-		return this.components.size();
-	},
+	numComponents: { configurable:false, enumerable:false, value: function(){ return this.components.size; } },
 
 	/**
 	 * Add Component
 	 */
-	addComponent: function (component){
-		this.components.add(component);
-		component.setParentElement(this.element);
+	addComponent: { writeable:false, configurable:false, enumerable:false, 
+					value: function(component){ 
+							   this.components.add(component);
+							   component.build();
+							   component.parentElement = this.element;
+						   }
 	},
-	
+ 
 	/**
 	 * Remove Component
 	 */
-	removeComponent: function (component){
-		this.components.remove(component);
-		this.element.removeChild(component.element);
-	},
+	removeComponent: { writeable:false, configurable:false, enumerable:false, 
+					   value: function(component){ 
+						          this.components.remove(component);
+						          this.element.removeChild(component.element);
+						 	  } 
+	}
 	
 	/**
 	 * Get Component By Id
-	 */
+	 * /
 	getComponentById: function (componentId){
 		var size = this.numComponents();
 		for (i = 0; i < size; i++){
@@ -133,4 +119,5 @@ Class({package: fringe.ui.components, class: 'Container', extends: fringe.ui.Com
 		
 		return null;
 	}
+	*/
 });
