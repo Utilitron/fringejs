@@ -24,7 +24,8 @@ fringe.ui.components.containers = {};
  *    - A Canvas layout container defines a rectangular region in which 
  *      you place child containers and controls.
  */
-fringe.ui.components.containers.Canvas = Object.create(new fringe.ui.components.Container, {
+fringe.ui.components.containers.Canvas = function() { this.build(); };
+fringe.ui.components.containers.Canvas.prototype = Object.create(new fringe.ui.components.Container, {
 
 	/**
 	 * Build
@@ -44,7 +45,8 @@ fringe.ui.components.containers.Canvas = Object.create(new fringe.ui.components.
  *    - The TitleBar container lets you place a title at the top of 
  *      a Panel or a Window container.
  */
-fringe.ui.components.containers.TitleBar = Object.create(new fringe.ui.components.Container, {
+fringe.ui.components.containers.TitleBar = function() { this.build(); };
+fringe.ui.components.containers.TitleBar.prototype = Object.create(new fringe.ui.components.Container, {
 
 	/**
 	 * Title 
@@ -85,7 +87,8 @@ fringe.ui.components.containers.TitleBar = Object.create(new fringe.ui.component
  *    - The ControlBar container lets you place controls at the bottom of 
  *      a Panel or at the top of a Window container.
  */
-fringe.ui.components.containers.ControlBar = Object.create(fringe.ui.components.containers.Canvas, {
+fringe.ui.components.containers.ControlBar = function() { this.build(); };
+fringe.ui.components.containers.ControlBar.prototype = Object.create(new fringe.ui.components.containers.Canvas, {
 });
 
 
@@ -95,7 +98,8 @@ fringe.ui.components.containers.ControlBar = Object.create(fringe.ui.components.
  *    - A Panel container consists of a title bar and a 
  *      content area for its children.
  */
-fringe.ui.components.containers.Panel = Object.create(new fringe.ui.components.Container, {
+fringe.ui.components.containers.Panel = function() { this.build(); };
+fringe.ui.components.containers.Panel.prototype = Object.create(new fringe.ui.components.Container, {
 	/**
 	 * Close
 	 */	
@@ -105,10 +109,6 @@ fringe.ui.components.containers.Panel = Object.create(new fringe.ui.components.C
 	 * Close
 	 */
 	setTitle: { writeable:false, configurable:false, value: function(title){ this.titleBar.title = title; } },
-	
-	close: function(){
-		this.parentElement.removeChild(this.element);
-	},
 	
 	/**
 	 * TitleBar
@@ -132,17 +132,23 @@ fringe.ui.components.containers.Panel = Object.create(new fringe.ui.components.C
 			 value: function (){
 				this.element = document.createElement('div');
 				this.element.className = 'panel';
-
-			  	this.element = document.createElement('div');
+				
+				this.titleBar = new fringe.ui.components.containers.TitleBar;
+				this.canvas = new fringe.ui.components.containers.Canvas;
+				this.controlBar = new fringe.ui.components.containers.ControlBar;
 				
 				this.addComponent(this.titleBar);
 				this.addComponent(this.canvas);
 				this.addComponent(this.controlBar);
 
+				this.titleBar.title = 'Panel';
+				this.canvas.element.textContent = 'Canvas';
+				this.controlBar.element.textContent = 'Control Bar';
 				
 				var self = this;
 
 				var closeButton = document.createElement('a');
+					closeButton.className = 'close';
 					closeButton.href = '#';	
 					closeButton.onclick = function() {
 						self.close.call(self);
