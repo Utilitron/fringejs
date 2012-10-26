@@ -1,4 +1,4 @@
 fringejs
 ========
 
-JavaScript Classify Framework 
+A JavaScript Web Application Framework 
