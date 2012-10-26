@@ -100,7 +100,6 @@ fringe.ui.components.Container.prototype = Object.create(fringe.ui.Component, {
 	addComponent: { writeable:false, configurable:false, enumerable:false, 
 					value: function(component){ 
 							   this.components.add(component);
-							   component.build();
 							   component.parentElement = this.element;
 						   }
 	},
