@@ -7,7 +7,7 @@
 
  * Permission is granted to anyone to use this software for any purpose,
  * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
+ * freely, without restriction.
  * 
  * AUTHOR
  * ======
