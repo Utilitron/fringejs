@@ -77,7 +77,8 @@ fringe.util.ArrayList.prototype = Object.create(Object.prototype, {
 });
  
 //AjaxUtil
-fringe.util.AjaxUtil = Object.create(Object.prototype, {
+fringe.util.AjaxUtil = function(){ }
+fringe.util.AjaxUtil.prototype = Object.create(Object.prototype, {
 	/**
 	 * public static Array
 	 */  
