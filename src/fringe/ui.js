@@ -43,7 +43,7 @@ fringe.ui.UiObject = Object.create(Object.prototype, {
 	 * Element 
 	 * public HtmlElement
 	 */
-	element: { configurable:false,  value: null },
+	element: { writable:true, configurable:false, enumerable:true,  value: null },
  
 
 });
@@ -52,7 +52,7 @@ fringe.ui.Component = Object.create(fringe.ui.UiObject, {
 	/**
 	 * HTML Parent
 	 */
-	_parentElement: { configurable:false, enumerable:false, value: null },
+	_parentElement: { writable:true, configurable:false, enumerable:false, value: null },
 	parentElement: { configurable:false,
 					 get: function() { return this._parentElement },
 					 set: function(parentElement) {
@@ -67,7 +67,7 @@ fringe.ui.Component = Object.create(fringe.ui.UiObject, {
 	/**
 	 * Build
 	 */
-	build: { configurable:false, 
+	build: { writable:false, configurable:false, 
 			 value: function (){
 				// Most elements will just be a div, otherwise overwrite this with what needs to be added.
 			  	this.element = document.createElement('div');
@@ -81,23 +81,23 @@ fringe.ui.components = {};
 
 
 //Container
-fringe.ui.components.Container = function(){ this.components = new fringe.util.ArrayList };
+fringe.ui.components.Container = function(){ this.components = new fringe.util.ArrayList() };
 fringe.ui.components.Container.prototype = Object.create(fringe.ui.Component, {
 	/**
 	 * Components collection
 	 * private final ArrayList
 	 */
-	components: { writeable:false, configurable:false, enumerable:false,  value: null },
+	components: { writable:true, configurable:false, enumerable:false,  value: null },
 
 	/**
 	 * Number Of Components
 	 */
-	numComponents: { configurable:false, enumerable:false, value: function(){ return this.components.size; } },
+	numComponents: { writable:false, configurable:false, enumerable:false, value: function(){ return this.components.size; } },
 
 	/**
 	 * Add Component
 	 */
-	addComponent: { writeable:false, configurable:false, enumerable:false, 
+	addComponent: { writable:false, configurable:false, enumerable:false, 
 					value: function(component){ 
 							   this.components.add(component);
 							   component.parentElement = this.element;
@@ -107,7 +107,7 @@ fringe.ui.components.Container.prototype = Object.create(fringe.ui.Component, {
 	/**
 	 * Remove Component
 	 */
-	removeComponent: { writeable:false, configurable:false, enumerable:false, 
+	removeComponent: { writable:false, configurable:false, enumerable:false, 
 					   value: function(component){ 
 						          this.components.remove(component);
 						          this.element.removeChild(component.element);
