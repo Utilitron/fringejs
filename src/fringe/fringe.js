@@ -36,37 +36,37 @@ fringe.util.ArrayList.prototype = Object.create(Object.prototype, {
 	 * Element collection
 	 * private final Array
 	 */
-	elements: { writeable:false, configurable:false, enumerable:false,  value: null },
+	elements: { writable:true, configurable:false, enumerable:false,  value: null },
  
 	/**
 	 * public getter Number
 	 * Returns the number of elements in this collection.
 	 */  
-	size: { configurable:false, enumerable:false, get: function(){ return this.elements.length; } },
+	size: { writable:false, configurable:false, enumerable:true, value: function(){ return this.elements.length; } },
  
 	/**
 	 * public getter Boolean
 	 * Returns true if this collection contains no elements.
 	 */  
-	isEmpty: { configurable:false, enumerable:false, get: function(){ return (this.elements.length > 0); } },
+	isEmpty: { writable:false, configurable:false, enumerable:true, value: function(){ return (this.elements.length > 0); } },
  
 	/**
 	 * public static Boolean
 	 * Returns true if this collection contains the specified element.
 	 */  
-	 contains: { writeable:false, configurable:false, enumerable:false, value: function(obj){ return (obj in this.elements); } },
+	 contains: { writable:false, configurable:false, enumerable:true, value: function(obj){ return (obj in this.elements); } },
 
 	 /**
 	 * public static Boolean
 	 * Adds an element to this collection.
 	 */  
-	add: { writeable:false, configurable:false, enumerable:false, value: function(obj){ this.elements.push(obj); } },
+	add: { writable:false, configurable:false, enumerable:true, value: function(obj){ this.elements.push(obj); } },
  
 	/**
 	 * public static Boolean
 	 * Removes an element to this collection.
 	 */  
-	remove: { writeable:false, configurable:false, enumerable:false, 
+	remove: { writable:false, configurable:false, enumerable:true, 
 			  value: function(obj){
 				  var index = this.elements.indexOf(obj);
 				  		if (index != -1){
@@ -82,15 +82,15 @@ fringe.util.AjaxUtil.prototype = Object.create(Object.prototype, {
 	/**
 	 * public static Array
 	 */  
-	METHODS: { writeable:false, configurable:false, enumerable:false, value: ['GET', 'POST', 'PUT'] },
-	METHOD_GET: { writeable:false, configurable:false, enumerable:false, value: 'GET' },
-	METHOD_POST: { writeable:false, configurable:false, enumerable:false, value: 'POST' },
-	METHOD_PUT: { writeable:false, configurable:false, enumerable:false, value: 'PUT' },
+	METHODS: { writable:false, configurable:false, enumerable:false, value: ['GET', 'POST', 'PUT'] },
+	METHOD_GET: { writable:false, configurable:false, enumerable:true, value: 'GET' },
+	METHOD_POST: { writable:false, configurable:false, enumerable:true, value: 'POST' },
+	METHOD_PUT: { writable:false, configurable:false, enumerable:true, value: 'PUT' },
 
 	/**
 	 * Method String
 	 */
-	_method: { configurable:false, enumerable:false, value: 'GET' },
+	_method: { writable:true, configurable:false, enumerable:false, value: 'GET' },
 	method: { configurable:false,
 			  get: function() { return this._method },
 			  set: function(value) {
@@ -104,18 +104,18 @@ fringe.util.AjaxUtil.prototype = Object.create(Object.prototype, {
 	/**
 	 * URL String
 	 */
-	url: { configurable:false, value: null },
+	url: { writable:true, configurable:false, value: null },
 
 	/**
 	 * Parameters
 	 */
-	 params: { configurable:false, value: null },
+	 params: { writable:true, configurable:false, value: null },
 
 	/**
 	 * public getter Ajax Object
 	 * Returns the Ajax Object.
 	 */  
-	_ajaxObj: { configurable:false, enumerable:false, value: null },
+	_ajaxObj: { writable:true, configurable:false, enumerable:false, value: null },
 	ajaxObj: { configurable:false, enumerable:false,
 			   get: function(){
 				   if (this._ajaxObj == null){
@@ -136,7 +136,7 @@ fringe.util.AjaxUtil.prototype = Object.create(Object.prototype, {
 	/**
 	 * Ajax Response Handler
 	 */
-	_ajaxResponseHandler: { configurable:false, enumerable:false, value: null },
+	_ajaxResponseHandler: { writable:true, configurable:false, enumerable:false, value: null },
 	ajaxResponseHandler: { configurable:false, enumerable:false,
 						   get: function() { return this._ajaxResponseHandler },
 						   set: function(responseHandler) {
@@ -150,7 +150,7 @@ fringe.util.AjaxUtil.prototype = Object.create(Object.prototype, {
 	/**
 	 * Ajax Send Request
 	 */
-	sendRequest: { configurable:false, enumerable:false, 
+	sendRequest: { writable:false, configurable:false, enumerable:true, 
 				   value: function() {
 						if (this.url != null && this.ajaxResponseHandler != null) {
 							this.ajaxObj.onreadystatechange = this.ajaxResponseHandler;
