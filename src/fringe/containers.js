@@ -103,27 +103,30 @@ fringe.ui.components.containers.Panel.prototype = Object.create(new fringe.ui.co
 	/**
 	 * Close
 	 */	
-	close: { writeable:false, configurable:false, value: function(){ this.parentElement.removeChild(this.element); } },
+	close: { writable:false, configurable:false, value: function(){ this.parentElement.removeChild(this.element); } },
 	
 	/**
-	 * Close
+	 * Set Title
 	 */
-	setTitle: { writeable:false, configurable:false, value: function(title){ this.titleBar.title = title; } },
+	title: { configurable:false, set: function(value){ 
+											this.titleBar.title = title; 
+										}
+		   },
 	
 	/**
 	 * TitleBar
 	 */
-	titleBar: { writeable:false, configurable:false,  value: Object.create(fringe.ui.components.containers.TitleBar) },
+	titleBar: { writable:true, configurable:false,  value: null },
 	
 	/**
 	 * Canvas
 	 */
-	canvas: { writeable:false, configurable:false,  value: Object.create(fringe.ui.components.containers.Canvas) },
+	canvas: { writable:true, configurable:false,  value: null },
 	
 	/**
 	 * ControlBar
 	 */
-	controlBar: { writeable:false, configurable:false,  value: Object.create(fringe.ui.components.containers.ControlBar) },
+	controlBar: { writable:true, configurable:false,  value: null },
 
 	/**
 	 * Build
