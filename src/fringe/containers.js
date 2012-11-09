@@ -60,7 +60,7 @@ fringe.ui.components.containers.TitleBar.prototype = Object.create(new fringe.ui
 			  },
 		  set: function(value) {
 				  if (this.element != null)
-					  this.element.firstChild.textContent = value;
+					  return this.element.firstChild.textContent = value;
 				  else
 					  throw new Error('!!');
 			  }
@@ -71,9 +71,10 @@ fringe.ui.components.containers.TitleBar.prototype = Object.create(new fringe.ui
 	 */
 	build: { configurable:false, value: function (){
 	    	this.element = document.createElement('div');
-	    	this.element.className = 'title';
+	    	this.element.className = 'titleBar';
 	    	
-	    	var title = document.createElement('span');
+	    	var title = document.createElement('div');
+	    		title.className = 'title';
 	    	this.element.appendChild(title);
 		}
 	}
@@ -88,7 +89,17 @@ fringe.ui.components.containers.TitleBar.prototype = Object.create(new fringe.ui
  *      a Panel or at the top of a Window container.
  */
 fringe.ui.components.containers.ControlBar = function() { this.build(); };
-fringe.ui.components.containers.ControlBar.prototype = Object.create(new fringe.ui.components.containers.Canvas, {
+fringe.ui.components.containers.ControlBar.prototype = Object.create(new fringe.ui.components.Container, {
+
+	/**
+	 * Build
+	 */
+	build: { configurable:false, value: function (){
+	    	this.element = document.createElement('div');
+	    	this.element.className = 'controlBar';
+		}
+	}
+
 });
 
 
@@ -103,15 +114,34 @@ fringe.ui.components.containers.Panel.prototype = Object.create(new fringe.ui.co
 	/**
 	 * Close
 	 */	
-	close: { writable:false, configurable:false, value: function(){ this.parentElement.removeChild(this.element); } },
+	close: { writable:false, configurable:false, 
+			 value: function(){
+						if(!e) var e = window.event;
+						//e.cancelBubble is supported by IE - this will kill the bubbling process.
+						e.cancelBubble = true;
+						e.returnValue = false;
+	
+						//e.stopPropagation works only in Firefox.
+						if (e.stopPropagation) {
+							e.stopPropagation();
+							e.preventDefault();
+						}
+						
+				 		this.parentElement.removeChild(this.element); 
+				 	} 
+	},
 	
 	/**
 	 * Set Title
 	 */
-	title: { configurable:false, set: function(value){ 
-											this.titleBar.title = title; 
-										}
-		   },
+	title: { configurable:false, 
+			 set: function(value){ 
+					this.titleBar.title = value; 
+				  },
+			 get: function(){ 
+					return this.titleBar.title; 
+				  }
+	},
 	
 	/**
 	 * TitleBar
@@ -172,6 +202,68 @@ fringe.ui.components.containers.Panel.prototype = Object.create(new fringe.ui.co
  *      and a content area for its child. 
  */
 fringe.ui.components.containers.Window = Object.create(new fringe.ui.components.Container, {
+	/**
+	 * Close
+	 */	
+	close: { writable:false, configurable:false, value: function(){ this.parentElement.removeChild(this.element); } },
+	
+	/**
+	 * Set Title
+	 */
+	title: { configurable:false, set: function(value){ 
+											this.titleBar.title = title; 
+										}
+		   },
+	
+	/**
+	 * TitleBar
+	 */
+	titleBar: { writable:true, configurable:false,  value: null },
+	
+	/**
+	 * ControlBar
+	 */
+	controlBar: { writable:true, configurable:false,  value: null },
+	
+	/**
+	 * Canvas
+	 */
+	canvas: { writable:true, configurable:false,  value: null },
+	
+	/**
+	 * Build
+	 */
+	build: { configurable:false, 
+			 value: function (){
+				this.element = document.createElement('div');
+				this.element.className = 'window';
+				
+				this.titleBar = new fringe.ui.components.containers.TitleBar;
+				this.canvas = new fringe.ui.components.containers.Canvas;
+				this.controlBar = new fringe.ui.components.containers.ControlBar;
+				
+				this.addComponent(this.titleBar);
+				this.addComponent(this.canvas);
+				this.addComponent(this.controlBar);
+
+				this.titleBar.title = 'Window';
+				this.controlBar.element.textContent = 'Control Bar';
+				this.canvas.element.textContent = 'Canvas';
+				
+				var self = this;
+
+				var closeButton = document.createElement('a');
+					closeButton.className = 'close';
+					closeButton.href = '#';	
+					closeButton.onclick = function() {
+						self.close.call(self);
+					};
+					closeButton.textContent = 'Close';
+				
+				this.titleBar.element.appendChild(closeButton);
+			 }
+	}
+	
 });
 
 
