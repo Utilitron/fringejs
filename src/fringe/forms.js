@@ -20,6 +20,60 @@
 fringe.ui.components.forms = {};
 
 
+
+/**
+ *	Form Panel	
+ */
+fringe.ui.components.forms.FormPanel = function() { 
+	this.build();
+}
+fringe.ui.components.forms.FormPanel.prototype = Object.create(new fringe.ui.components.Container, {
+	
+	/**
+	 * Set Title
+	 */
+	title: { configurable:false, set: function(value){ this.titleBar.title = title; } },
+	
+	/**
+	 * TitleBar
+	 */
+	titleBar: { writable:true, configurable:false,  value: null },
+	
+	/**
+	 * ControlBar
+	 */
+	controlBar: { writable:true, configurable:false,  value: null },
+	
+	/**
+	 * Form
+	 */
+	form: { writable:true, configurable:false,  value: null },
+	
+	/**
+	 * Build
+	 */
+	build: { configurable:false, 
+			 value: function (){
+				this.element = document.createElement('div');
+				this.element.className = 'panel formPanel';
+				
+				this.titleBar = new fringe.ui.components.containers.TitleBar;
+				this.form = new fringe.ui.components.Form;
+				this.controlBar = new fringe.ui.components.containers.ControlBar;
+				
+				this.addComponent(this.titleBar);
+				this.addComponent(this.form);
+				this.addComponent(this.controlBar);
+				
+				this.titleBar.title = 'FormPanel';
+			 }
+	}
+	
+});
+
+
+
+
 /**
  *	Form Text Input
  *    - A Form Text Input
@@ -46,6 +100,24 @@ fringe.ui.components.forms.TextInput.prototype = Object.create(new fringe.ui.com
 				  }
 	},
 
+	required: { configurable:false,
+		 get: function() { 
+				  if (this._label != null)
+					  return this._label.textContent;
+				  else
+					  return null;
+			  },
+		 set: function(value) {
+				  if (this._label != null){
+					  if (value == true){
+						if (this._label.className != "") this._label.className += ' ';
+						this._label.className += 'required';
+					  }
+				  } else
+					  throw new Error('!!');
+			  }
+	},
+	
 	/**
 	 * Input
 	 */
@@ -56,7 +128,7 @@ fringe.ui.components.forms.TextInput.prototype = Object.create(new fringe.ui.com
 	 */
 	build: { configurable:false, 
 			 value: function (){
-			    this.element = document.createElement("span");
+			    this.element = document.createElement("div");
 			    this.element.className = 'formInput';
 			    
 				this._label = document.createElement('label');
@@ -108,7 +180,7 @@ fringe.ui.components.forms.PasswordInput.prototype = Object.create(new fringe.ui
 	 */
 	build: { configurable:false, 
 			 value: function (){
-			    this.element = document.createElement("span");
+			    this.element = document.createElement("div");
 			    this.element.className = 'formInput';
 			    
 				this._label = document.createElement('label');
@@ -168,7 +240,6 @@ fringe.ui.components.forms.Button.prototype = Object.create(new fringe.ui.compon
 			    this.element.className = 'formInput';
 			    
 				this.label = document.createElement('label');
-				this.label.textContent = '&nbsp;';
 				
 				this.input = document.createElement('input');
 				this.input.type = 'button';

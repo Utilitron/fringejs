@@ -104,7 +104,7 @@ fringe.ui.components.grids.DataGrid.prototype = Object.create(new fringe.ui.comp
 	build: { configurable:false, 
 			 value: function (){
 				this.element = document.createElement('div');
-				this.element.className = 'dataGrid';
+				this.element.className = 'panel dataGrid';
 				
 				this.titleBar = new fringe.ui.components.containers.TitleBar;
 				this.grid = new fringe.ui.components.Grid;
