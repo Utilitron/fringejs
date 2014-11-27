@@ -15,7 +15,7 @@
  * 
  * Created: 2/12/2012
  */
- 
+
 /* package */
 fringe.ui = {};
 
@@ -23,56 +23,139 @@ fringe.ui = {};
 //UiObject
 fringe.ui.UiObject = Object.create(Object.prototype, {
 
-	id: { configurable:false,
-		  get: function() { 
-				  if (this.element != null)
-					  return this.element.id;
-				  else
-					  return null;
-			  },
-		  set: function(value) {
-				  if (this.element != null)
-					  this.element.id = value;
-				  else
-					  throw new Error('!!');
-			  }
-	},
+    id: {
+        configurable: false,
+        get: function() {
+            "use strict";
+            if (this.element !== null) {
+                return this.element.id;
+            } else {
+                return null;
+            }
+        },
+        set: function(value) {
+            "use strict";
+            if (this.element !== null) {
+                this.element.id = value;
+            } else {
+                throw new Error('!!');
+            }
+        }
+    },
 
-	
-	/**
-	 * Element 
-	 * public HtmlElement
-	 */
-	element: { writable:true, configurable:false, enumerable:true,  value: null },
- 
-
+    /**
+     * Element 
+     * public HtmlElement
+     */
+    element: {
+        writable: true,
+        configurable: false,
+        enumerable: true,
+        value: null
+    }
 });
 
 fringe.ui.Component = Object.create(fringe.ui.UiObject, {
-	/**
-	 * HTML Parent
-	 */
-	_parentElement: { writable:true, configurable:false, enumerable:false, value: null },
-	parentElement: { configurable:false,
-					 get: function() { return this._parentElement },
-					 set: function(parentElement) {
-						 if (this.element != null){
-							 this._parentElement = parentElement;
-						 	 this._parentElement.appendChild(this.element);
-						 } else
-							 throw new Error('!!');
-					 }
-	},
-	
-	/**
-	 * Build
-	 */
-	build: { writable:false, configurable:false, 
-			 value: function (){
-				// Most elements will just be a div, otherwise overwrite this with what needs to be added.
-			  	this.element = document.createElement('div');
-			 }
-	}
+    /**
+     * HTML Parent
+     */
+    _parentElement: {
+        writable: true,
+        configurable: false,
+        enumerable: false,
+        value: null
+    },
+    parentElement: {
+        configurable: false,
+        get: function() {
+            "use strict";
+            return this._parentElement;
+        },
+        set: function(parentElement) {
+            "use strict";
+            if (this.element !== null) {
+                this._parentElement = parentElement;
+                this._parentElement.appendChild(this.element);
+            } else {
+                throw new Error('NO ELEMENT ERROR');
+            }
+        }
+    },
+
+    /**
+     * The x position of the component in the parent's (or global) coordinate system.
+     */
+    //x: { configurable: false,
+    //     get: function() { return this._x },
+    //     set: function(x) {
+    //        this._x = x;
+    //     }
+    //},
+
+    /**
+     * The y position of the component in the parent's (or global) coordinate system.
+     */
+    //_y: { writable: true, configurable: false, enumerable: false, value: null },
+
+    /**
+     * The width of the component.
+     */
+    width: {
+        configurable: false,
+        get: function() {
+            "use strict";
+            if (this.element !== null) {
+                return this.element.style.width;
+            } else {
+                throw new Error('NO ELEMENT ERROR');
+            }
+
+        },
+        set: function(width) {
+            "use strict";
+            if (this.element !== null) {
+                this.element.style.width = width;
+            } else {
+                throw new Error('NO ELEMENT ERROR');
+            }
+        }
+    },
+
+    /**
+     * The height of the component.
+     */
+    height: {
+        configurable: false,
+        get: function() {
+            "use strict";
+            if (this.element !== null) {
+                return this.element.style.height;
+            } else {
+                throw new Error('NO ELEMENT ERROR');
+            }
+        },
+        set: function(height) {
+            "use strict";
+            if (this.element !== null) {
+                this.element.style.height = height;
+            } else {
+                throw new Error('NO ELEMENT ERROR');
+            }
+        }
+    },
+
+    /**
+     * Build
+     */
+    build: {
+        writable: false,
+        configurable: false,
+        value: function () {
+            "use strict";
+            // Most elements will just be a div, otherwise overwrite this with what needs to be added.
+            this.element = document.createElement('div');
+        }
+    }
 });
 
 
@@ -81,128 +164,75 @@ fringe.ui.components = {};
 
 
 //Container
-fringe.ui.components.Container = function(){ this.components = new fringe.util.ArrayList() };
+fringe.ui.components.Container = function() {
+    "use strict";
+    this.components = new fringe.util.ArrayList();
+};
 fringe.ui.components.Container.prototype = Object.create(fringe.ui.Component, {
-	/**
-	 * Components collection
-	 * private final ArrayList
-	 */
-	components: { writable:true, configurable:false, enumerable:false,  value: null },
+    /**
+     * Components collection
+     * private final ArrayList
+     */
+    components: {
+        writable: true,
+        configurable: false,
+        enumerable: false,
+        value: null
+    },
 
-	/**
-	 * Number Of Components
-	 */
-	numComponents: { writable:false, configurable:false, enumerable:false, value: function(){ return this.components.size; } },
+    /**
+     * Number Of Components
+     */
+    numComponents: {
+        writable: false,
+        configurable: false,
+        enumerable: false,
+        value: function() {
+            "use strict";
+            return this.components.size;
+        }
+    },
 
-	/**
-	 * Add Component
-	 */
-	addComponent: { writable:false, configurable:false, enumerable:false, 
-					value: function(component){ 
-							   this.components.add(component);
-							   component.parentElement = this.element;
-						   }
-	},
- 
-	/**
-	 * Remove Component
-	 */
-	removeComponent: { writable:false, configurable:false, enumerable:false, 
-					   value: function(component){ 
-						          this.components.remove(component);
-						          this.element.removeChild(component.element);
-						 	  } 
-	}
-	
-	/**
-	 * Get Component By Id
-	 * /
-	getComponentById: function (componentId){
-		var size = this.numComponents();
-		for (i = 0; i < size; i++){
-			var component = this.components.elements[i];
-			if (component.id == componentId)
-				return component;
-		}
-		
-		return null;
-	}
-	*/
-});
+    /**
+     * Add Component
+     */
+    addComponent: {
+        writable: false,
+        configurable: false,
+        enumerable: false,
+        value: function(component) {
+            "use strict";
+            this.components.add(component);
+            component.parentElement = this.element;
+        }
+    },
 
+    /**
+     * Remove Component
+     */
+    removeComponent: {
+        writable: false,
+        configurable: false,
+        enumerable: false,
+        value: function(component) {
+            "use strict";
+            this.components.remove(component);
+            this.element.removeChild(component.element);
+        }
+    }
 
-/**
- *	Grid	
- *    - A Grid container lets you arrange children as rows and columns of cells, 
- *      of an HTML table.
- */
-fringe.ui.components.Grid = function(){ 
-	this.rows = new fringe.util.ArrayList(); 
-	this.build();
-};
-fringe.ui.components.Grid.prototype = Object.create(fringe.ui.Component, {
-	/**
-	 * Row collection
-	 * private final ArrayList
-	 */
-	rows: { writable:true, configurable:false, enumerable:false,  value: null },
-	
-	/**
-	 * Add Row
-	 */
-	addRow: { writable:false, configurable:false, enumerable:false, 
-					value: function(row){ 
-							   this.rows.add(row);
-							   row.parentElement = this.element;
-						   }
-	},
-	
-	/**
-	 * Build
-	 */
-	build: { configurable:false, 
-			 value: function (){
-				this.element = document.createElement('table');
-				this.element.className = 'grid';
-			 }
-	}
-	
-});
+    /**
+     * Get Component By Id
+     * /
+    getComponentById: function (componentId) {
+        var size = this.numComponents();
+        for (i = 0; i < size; i++) {
+            var component = this.components.elements[i];
+            if (component.id === componentId)
+                return component;
+        }
 
-
-/**
- *	Form	
- *    - A Form container lets you add children as items of an HTML form.
- */
-fringe.ui.components.Form = function(){ 
-	this.components = new fringe.util.ArrayList(); 
-	this.build();
-};
-fringe.ui.components.Form.prototype = Object.create(fringe.ui.Component, {
-	/**
-	 * Form Componenet collection
-	 * private final ArrayList
-	 */
-	components: { writable:true, configurable:false, enumerable:false,  value: null },
-	
-	/**
-	 * Add Form Component
-	 */
-	addFormComponent: { writable:false, configurable:false, enumerable:true, 
-					value: function(component){ 
-							   this.components.add(component);
-							   component.parentElement = this.element;
-						   }
-	},
-		
-	/**
-	 * Build
-	 */
-	build: { configurable:false, 
-			 value: function (){
-				this.element = document.createElement('form');
-				this.element.className = 'form';
-			 }
-	}
-
+        return null;
+    }
+     */
 });
