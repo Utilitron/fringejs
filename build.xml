@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<project basedir="." default="compile-all">
+
+  <taskdef name="jscomp" classname="com.google.javascript.jscomp.ant.CompileTask"
+           classpath="/home/utilitron/Apps/eclipse/closure-compiler/compiler.jar"/>
+
+  <target name="compile-all" depends="compile-min, compile-debug" />
+ 
+  <target name="compile-min">
+    
+    <jscomp compilationLevel="simple" warning="verbose" 
+            debug="false" output="output/fringe.min.js">
+
+      <sources dir="${basedir}/src/fringe">
+        <file name="core.js"/>
+        <file name="ui.js"/>
+        <file name="components.js"/>
+        <file name="containers.js"/>
+        <file name="grids.js"/>
+      </sources>
+
+    </jscomp>
+    
+  </target>
+  
+  <target name="compile-debug">
+    
+    <jscomp compilationLevel="simple" prettyPrint="true" warning="verbose" 
+            debug="true" output="output/fringe.debug.js">
+
+      <sources dir="${basedir}/src/fringe">
+        <file name="core.js"/>
+        <file name="ui.js"/>
+        <file name="components.js"/>
+        <file name="containers.js"/>
+        <file name="grids.js"/>
+      </sources>
+
+    </jscomp>
+    
+  </target>
+
+</project>
