@@ -1,4 +1,5 @@
-/*******************************************************************G * Copyright (C) 2012 Utilitron.net
+/*******************************************************************
+ * Copyright (C) 2012 Utilitron.net
  *
  * This software is provided 'as-is', without any express or implied
  * warranty.  In no event will the authors be held liable for any damages
@@ -6,7 +7,7 @@
 
  * Permission is granted to anyone to use this software for any purpose,
  * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
+ * freely, without restriction.
  * 
  * AUTHOR
  * ======
@@ -25,14 +26,14 @@ fringe.ui.components.grids = {};
 fringe.ui.components.grids.DataGrid = function(dataProvider) { 
 	this.build();
 	this.dataProvider = dataProvider; 
-}
+};
 fringe.ui.components.grids.DataGrid.prototype = Object.create(new fringe.ui.components.Container, {
 	/**
 	 * Data Provider
 	 */
 	_dataProvider: { writable:true, configurable:false, enumerable:false, value: null },
 	dataProvider: { configurable:false,
-					get: function() { return this._dataProvider },
+					get: function() { return this._dataProvider; },
 					set: function(value) { 
 							this._dataProvider = value;
 							
@@ -44,7 +45,7 @@ fringe.ui.components.grids.DataGrid.prototype = Object.create(new fringe.ui.comp
 	/**
 	 * Set Title
 	 */
-	title: { configurable:false, set: function(value){ this.titleBar.title = title; } },
+	title: { configurable:false, set: function(value){ this.titleBar.title = value; } },
 	
 	/**
 	 * TitleBar
@@ -98,6 +99,18 @@ fringe.ui.components.grids.DataGrid.prototype = Object.create(new fringe.ui.comp
 							 }
 	},
 	
+        /**
+         * Clears all data rows.
+         */
+        clear: { writable:true, configurable:false, 
+                                          value: function() {
+                                                                for(var row in this.grid.rows){
+                                                                        
+                                                                        this.grid.removeRow(row);
+                                                                }
+                                                         }
+        },
+	
 	/**
 	 * Build
 	 */
@@ -129,7 +142,7 @@ fringe.ui.components.grids.DataGrid.prototype = Object.create(new fringe.ui.comp
 fringe.ui.components.grids.GridRow = function() {
 	this.columns = new fringe.util.ArrayList(); 
 	this.build(); 
-}
+};
 fringe.ui.components.grids.GridRow.prototype = Object.create(new fringe.ui.components.Container, {
 	
 	/**
